@@ -1,0 +1,28 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import argparse
+import os
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-l", "--list", help="File of branches list with its repo",
+                    required="1")
+parser.add_argument("-u", "--update", help="Update git pull ... each branch",
+                    action="store_true")
+args = parser.parse_args()
+
+source_path = os.getcwd()
+with open(args.list, "r") as branches:
+    for info in branches:
+        info = info.strip()
+        repo, branch = info.split()[0], info.split()[1]
+        os.chdir(branch)
+
+        print "*" * 75
+        os.system("git status")
+
+        if args.update:
+            os.system("git branch")
+            os.system("git pull %s %s" % (repo, branch) )
+
+        os.chdir(source_path)
