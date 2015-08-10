@@ -7,7 +7,9 @@ import os
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--list", help="File of branches list with its repo",
                     required="1")
-parser.add_argument("-u", "--update", help="Update git pull ... each branch",
+parser.add_argument("-pl", "--pull", help="Update git pull ... each branch",
+                    action="store_true")
+parser.add_argument("-ps", "--push", help="Update git push ... each branch",
                     action="store_true")
 args = parser.parse_args()
 
@@ -21,8 +23,12 @@ with open(args.list, "r") as branches:
         print "*" * 75
         os.system("git status")
 
-        if args.update:
+        if args.pull:
             os.system("git branch")
             os.system("git pull %s %s" % (repo, branch) )
+
+        if args.push:
+            os.system("git branch")
+            os.system("git push %s %s" % (repo, branch) )
 
         os.chdir(source_path)
