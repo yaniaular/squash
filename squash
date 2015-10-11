@@ -17,6 +17,9 @@ parser.add_argument("-cl", "--clean", help="Clean execute, "
 parser.add_argument("-cp", "--copy", help="Copy, "
                     "files and directory into rma",
                     action="store_true")
+parser.add_argument("-li", "--lint", help="Copy, "
+                    "files and directory into rma",
+                    action="store_true")
 args = parser.parse_args()
 
 source_path = os.getcwd()
@@ -44,6 +47,13 @@ with open(args.list, "r") as branches:
 
         if args.copy:
             if module:
-                os.system("cp %s ../rma/ -r" % module)
+                os.system("cp %s /home/yanina/vauxoo/public_addons/rma -r" % module)
+
+        if args.lint:
+            base_path = "~/vauxoo/public_addons/maintainer-quality-tools/travis/"
+            if module:
+                os.system("flake8 %s --config=%scfg/travis_run_flake8__init__.cfg --ignore=F401" % (module,base_path))
+                os.system("%stest_odoo_lint --path %s" % (base_path,module))
+                os.system("%srun_pylint.py --config-file %scfg/travis_run_pylint_pr.cfg --path %s/" % (base_path,base_path,module))
 
         os.chdir(source_path)
