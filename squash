@@ -6,7 +6,7 @@ import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--list", help="File of branches list with its repo",
-                    required="1")
+                    default="/home/yanina/vauxoo/tools/squash/squash.txt")
 parser.add_argument("-pl", "--pull", help="Update git pull ... each branch",
                     action="store_true")
 parser.add_argument("-ps", "--push", help="Update git push ... each branch",
