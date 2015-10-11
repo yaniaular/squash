@@ -11,14 +11,22 @@ parser.add_argument("-pl", "--pull", help="Update git pull ... each branch",
                     action="store_true")
 parser.add_argument("-ps", "--push", help="Update git push ... each branch",
                     action="store_true")
+parser.add_argument("-cl", "--clean", help="Clean execute, "
+                    "files and directory ... each branch",
+                    action="store_true")
+parser.add_argument("-cp", "--copy", help="Copy, "
+                    "files and directory into rma",
+                    action="store_true")
 args = parser.parse_args()
 
 source_path = os.getcwd()
 with open(args.list, "r") as branches:
     for info in branches:
         info = info.strip()
-        repo, branch = info.split()[0], info.split()[1]
+        repo, branch, module = info.split()[0], info.split()[1], False
         os.chdir(branch)
+        if len(info.split()) == 3:
+            module = info.split()[2]
 
         print "*" * 75
         os.system("git status")
@@ -30,5 +38,12 @@ with open(args.list, "r") as branches:
         if args.push:
             os.system("git branch")
             os.system("git push %s %s" % (repo, branch) )
+
+        if args.clean:
+            os.system("git clean -xfd")
+
+        if args.copy:
+            if module:
+                os.system("cp %s ../rma/ -r" % module)
 
         os.chdir(source_path)
